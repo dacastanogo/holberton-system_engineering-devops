@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Bash script that ignores sigterm and displays a message.
+trap "echo I am invincible!!!" SIGTERM
+while true; do
+	echo To infinity and beyond
+	sleep 2
+done
