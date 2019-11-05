@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+#show the files in the current dir in a list format
+for file in *; do
+	echo "$file" | cut -d'-' -f2-
+done
