@@ -5,15 +5,14 @@ from sys import argv
 
 
 if __name__ == '__main__':
-    """Request from an API"""
-    employee_id = argv[1]
-    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                            format(employee_id))
-    name = user.json()['name']
-    all_todo = 'https://jsonplaceholder.typicode.com/all_todo?userId={}'\
-        .format(employee_id)
 
-    tasks = requests.get("{}".format(all_todo)).json()
+    response = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
+                            format(argv[1]))
+    name = response.json()['name']
+    tasks_url = 'https://jsonplaceholder.typicode.com/todos?userId={}'\
+        .format(argv[1])
+
+    tasks = requests.get("{}".format(tasks_url)).json()
     done_tasks = []
     for task in tasks:
         if task['completed'] is True:

@@ -2,18 +2,18 @@
 """Return information about employee todo list, export to CSV"""
 import json
 import requests
-from sys import argv
+import sys
 
 
 if __name__ == "__main__":
-    employee_id = argv[1]
-    user = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                            format(employee_id))
+
+    user = requests.get("https://jsonplaceholder.typicode.com/users/" +
+                            sys.argv[1])
     json_user = json.loads(user.text)
     username = json_user.get('username')
-    all_todo = 'https://jsonplaceholder.typicode.com/all_todo?userId={}'\
-        .format(employee_id)
-    todo_json = json.loads(user.text)
+    all_todo = requests.get("https://jsonplaceholder.typicode.com/todos/" +
+                            "?userId=" + sys.argv[1])
+    todo_json = json.loads(all_todo.text)
     tasks = []
     for task in todo_json:
         tasks.append(task)
