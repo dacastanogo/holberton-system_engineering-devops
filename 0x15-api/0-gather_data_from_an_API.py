@@ -1,30 +1,31 @@
-#!/usr/bin/python3
-""" Get """
+#!/usr/bin/pyton3
+"""Return information about employee todo list progress"""
 import requests
 from sys import argv
-if __name__ == "__main__":
 
-    response = requests.get('https://jsonplaceholder.typicode.com/users/{}'.
-                            format(argv[1]))
 
-    name = response.json()['name']
+def api_request():
+    """Request from an API"""
+    employee_id = argv[1]
+    url_todo = 'https://jsonplaceholder.typicode.com/todos?userId='
+    url_user = 'https://jsonplaceholder.typicode.com/users/'
+    todo = requests.get(url_todo + employee_id).json()
+    user = requests.get(url_user + employee_id).json()
+    done_tasks = []
+    done_count = 0
+    total_tasks = len(todo)
+    employee = user.get('name')
 
-    url = 'https://jsonplaceholder.typicode.com/todos?userId={}'\
-        .format(argv[1])
+    for task in todo:
+        if task.get('completed'):
+            done_tasks.append(task)
+            done_count += 1
 
-    tasks = requests.get("{}".format(url)).json()
-    tasks_com = []
-    task_im = []
-    for task in tasks:
-        if task['completed'] is True:
-            tasks_com.append(task)
-        else:
-            task_im.append(task)
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employee, done_count, total_tasks))
 
-    num_total = len(tasks)
-    num_complete = len(tasks_com)
-
-    print("Employee {} is done with tasks({}/{}):".
-          format(name, num_complete, num_total))
-    for task in tasks_com:
+    for task in done_tasks:
         print("\t {}".format(task['title']))
+
+if __name__ == '__main__':
+    api_request()
