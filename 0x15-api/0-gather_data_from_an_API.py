@@ -7,14 +7,14 @@ from sys import argv
 def api_request():
     """Request from an API"""
     employee_id = argv[1]
-    url_todo = 'https://jsonplaceholder.typicode.com/todos/'
-    url_user = 'https://jsonplaceholder.typicode.com/todos/?userId='
+    url_todo = 'https://jsonplaceholder.typicode.com/todos?userId='
+    url_user = 'https://jsonplaceholder.typicode.com/users/'
     todo = requests.get(url_todo + employee_id).json()
     user = requests.get(url_user + employee_id).json()
     done_tasks = []
     done_count = 0
     total_tasks = len(todo)
-    employee = user[0].get('name')
+    employee = user.get('name')
 
     for task in todo:
         if task.get('completed'):
