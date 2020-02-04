@@ -8,7 +8,7 @@ import sys
 if __name__ == "__main__":
 
     user = requests.get("https://jsonplaceholder.typicode.com/users/" +
-                            sys.argv[1])
+                        sys.argv[1])
     json_user = json.loads(user.text)
     username = json_user.get('username')
     all_todo = requests.get("https://jsonplaceholder.typicode.com/todos/" +
