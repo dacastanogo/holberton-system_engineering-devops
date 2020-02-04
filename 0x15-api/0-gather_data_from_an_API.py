@@ -8,23 +8,21 @@ def api_request():
     """Request from an API"""
     employee_id = argv[1]
     url_todo = 'https://jsonplaceholder.typicode.com/todos/'
-    url_user = 'https://jsonplaceholder.typicode.com/users/'
-    todo = requests.get(url_todo, params={'userId': employee_id})
-    user = requests.get(url_user, params={'id': employee_id})
-
-    todo_json_list = todo.json()
-    user_json_list = user.json()
-
+    url_user = 'https://jsonplaceholder.typicode.com/todos/?userId='
+    todo = requests.get(url_todo + employee_id).json()
+    user = requests.get(url_user + employee_id).json()
     done_tasks = []
-    total_tasks = len(todo_json_list)
-    employee = user_json_list[0].get('name')
+    done_count = 0
+    total_tasks = len(todo)
+    employee = user[0].get('name')
 
-    for task in todo_json_list:
-        if task.get('completed') is True:
+    for task in todo:
+        if task.get('completed'):
             done_tasks.append(task)
+            done_count += 1
 
     print("Employee {} is done with tasks({}/{}):"
-          .format(employee, len(done_tasks), total_tasks))
+          .format(employee, done_count, total_tasks))
 
     for task in done_tasks:
         print("\t {}".format(task.get('title')))
