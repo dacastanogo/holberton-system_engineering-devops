@@ -1,5 +1,5 @@
 #!/usr/bin/pyton3
-"""Return information about employee TODO list progress"""
+"""Return information about employee todo list progress"""
 import requests
 from sys import argv
 
