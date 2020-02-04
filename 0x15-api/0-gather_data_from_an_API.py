@@ -1,40 +1,33 @@
 #!/usr/bin/pyton3
 """Return information about employee TODO list progress"""
 import requests
-import sys
-
-requested_url = "https://jsonplaceholder.typicode.com/"
+from sys import argv
 
 
 def api_request():
     """Request from an API"""
-    if len(sys.argv) < 2:
-        return print('USAGE:', __file__, '<employee id>')
-    employee_id = sys.argv[1]
-    try:
-        _employee_id = int(sys.argv[1])
-    except ValueError:
-        return print("Employee id must be an integer")
+    employee_id = argv[1]
+    url_todo = 'https://jsonplaceholder.typicode.com/todos/'
+    url_user = 'https://jsonplaceholder.typicode.com/users/'
+    todo = requests.get(url_todo, params={'userId': employee_id})
+    user = requests.get(url_user, params={'id': employee_id})
 
-    response = requests.get(requested_url + 'users/' + employee_id)
-    if response.status_code == 404:
-        return print('User id not found')
-    elif response.status_code != 200:
-        return print('Error: status_code:', response.status_code)
-    user = response.json()
+    todo_json_list = todo.json()
+    user_json_list = user.json()
 
-    response = requests.get(requested_url + 'todos/')
-    if response.status_code != 200:
-        return print('Error: status_code:', response.status_code)
-    todos = response.json()
+    done_tasks = []
+    total_tasks = len(todo_json_list)
+    employee = user_json_list[0].get('name')
 
-    user_todos = [todo for todo in todos
-                  if todo.get('userId') == user.get('id')]
-    completed = [todo for todo in user_todos if todo.get('completed')]
-    print('Employee', user.get('name'),
-          'is done with tasks({}/{}):'.
-          format(len(completed), len(user_todos)))
-    [print('\t', todo.get('title')) for todo in completed]
+    for task in todo_json_list:
+        if task.get('completed') is True:
+            done_tasks.append(task)
+
+    print("Employee {} is done with tasks({}/{}):"
+          .format(employee, len(done_tasks), total_tasks))
+
+    for task in done_tasks:
+        print("\t {}".format(task.get('title')))
 
 if __name__ == '__main__':
     api_request()
