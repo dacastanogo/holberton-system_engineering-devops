@@ -2,6 +2,7 @@
 """Return information about employee TODO list progress"""
 import requests
 import sys
+import csv
 
 requested_url = "https://jsonplaceholder.typicode.com/"
 
@@ -35,6 +36,14 @@ def api_request():
           'is done with tasks({}/{}):'.
           format(len(completed), len(user_todos)))
     [print('\t', todo.get('title')) for todo in completed]
+
+    with open(employee_id + '.csv', 'w') as csvfile:
+        writer = csv.writer(csvfile, lineterminator='\n',
+                            quoting=csv.QUOTE_ALL)
+        [writer.writerow(['{}'.format(field) for field in
+                          (todo.get('userId'), user.get('username'),
+                           todo.get('completed'), todo.get('title'))])
+         for todo in user_todos]
 
 if __name__ == '__main__':
     api_request()
