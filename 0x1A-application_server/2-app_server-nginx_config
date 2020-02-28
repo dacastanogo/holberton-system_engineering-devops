@@ -15,7 +15,6 @@
 #
 server {
         listen 80 default_server;
-        error_page 404 /custom_404.html; location = /custom_404.html {root /usr/share/nginx/html; internal;}
         server_name 34.74.36.218 127.0.0.1;
         listen [::]:80 default_server;
 
